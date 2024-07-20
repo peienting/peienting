@@ -33,7 +33,6 @@ class LoadingBar {
         bar.style.width = '0';
         bar.style.borderRadius = '10px';
         bar.style.height = '100%';
-        bar.style.transition = 'width 0.5s ease';
         this.progressBar = bar;
         barBase.appendChild(bar);
 
