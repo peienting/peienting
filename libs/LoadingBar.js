@@ -6,7 +6,7 @@ class LoadingBar {
         this.domElement.style.left = '0';
         this.domElement.style.width = '100%';
         this.domElement.style.height = '100%';
-        this.domElement.style.background = 'rgba(0, 0, 0, 0.8)';
+        this.domElement.style.background = 'rgba(0, 0, 0, 0.9)'; // Background with slight transparency
         this.domElement.style.display = 'flex';
         this.domElement.style.alignItems = 'center';
         this.domElement.style.justifyContent = 'center';
@@ -14,17 +14,17 @@ class LoadingBar {
         this.domElement.style.transition = 'opacity 0.5s';
 
         const barContainer = document.createElement("div");
-        barContainer.style.background = '#444';
+        barContainer.style.background = '#444'; // Darker background for contrast
         barContainer.style.width = '50%';
         barContainer.style.minWidth = '250px';
         barContainer.style.borderRadius = '10px';
-        barContainer.style.height = '15px';
+        barContainer.style.height = '20px'; // Increased height for better visibility
         barContainer.style.overflow = 'hidden';
         barContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
         this.domElement.appendChild(barContainer);
 
         const bar = document.createElement("div");
-        bar.style.background = 'linear-gradient(90deg, #22a, #4a9)';
+        bar.style.background = 'linear-gradient(90deg, #FF69B4, #FF1493)'; // Warm pink gradient
         bar.style.height = '100%';
         bar.style.width = '0';
         bar.style.borderRadius = '10px';
