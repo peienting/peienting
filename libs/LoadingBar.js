@@ -13,13 +13,6 @@ class LoadingBar {
         this.domElement.style.justifyContent = 'center';
         this.domElement.style.zIndex = '1111';
 
-        const timerElement = document.createElement("div");
-        timerElement.style.color = '#fff';
-        timerElement.style.fontSize = '20px';
-        timerElement.style.marginBottom = '20px';
-        this.timerElement = timerElement;
-        this.domElement.appendChild(timerElement);
-
         const barBase = document.createElement("div");
         barBase.style.width = '50%';
         barBase.style.minWidth = '250px';
@@ -37,20 +30,7 @@ class LoadingBar {
         this.progressBar = bar;
         barBase.appendChild(bar);
 
-        this.startTime = Date.now();
-        this.estimatedTime = options.estimatedTime || 5000; // Estimated time in milliseconds
-
         document.body.appendChild(this.domElement);
-        this.updateTimer();
-    }
-
-    updateTimer() {
-        const elapsedTime = Date.now() - this.startTime;
-        const remainingTime = Math.max(this.estimatedTime - elapsedTime, 0);
-        this.timerElement.textContent = `Time remaining: ${(remainingTime / 1000).toFixed(1)}s`;
-        if (remainingTime > 0) {
-            requestAnimationFrame(this.updateTimer.bind(this));
-        }
     }
 
     onprogress(delta) {
