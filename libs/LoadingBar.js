@@ -9,8 +9,8 @@ class LoadingBar {
         // Set background color to warm pink
         this.domElement.style.background = 'lightpink'; // Or other warm pink color like '#ff9999'
         this.domElement.style.display = 'flex';
-        this.domElement.style.alignItems = 'center';
-        this.domElement.style.justifyContent = 'center';
+        this.domElement.style.alignItems = 'center'; // Align vertically in center
+        this.domElement.style.justifyContent = 'center'; // Align horizontally in center
         this.domElement.style.flexDirection = 'column'; // Stack elements vertically
         this.domElement.style.zIndex = '1111';
         this.domElement.style.transition = 'opacity 0.5s';
@@ -18,8 +18,10 @@ class LoadingBar {
         // Create text element for "Bolton College"
         const collegeText = document.createElement("h2");
         collegeText.textContent = "Bolton College";
+        collegeText.style.color = 'black'; // Set text color to black
         collegeText.style.margin = '0'; // Remove default margin
         collegeText.style.textAlign = 'center'; // Center text horizontally
+        collegeText.style.fontSize = '1.2em'; // Increase font size slightly
         this.domElement.appendChild(collegeText);
 
         const barContainer = document.createElement("div");
@@ -28,7 +30,8 @@ class LoadingBar {
         barContainer.style.width = '50%';
         barContainer.style.minWidth = '250px';
         barContainer.style.borderRadius = '10px';
-        barContainer.style.height = '20px'; // Increased height for better visibility
+        // Increase progress bar height
+        barContainer.style.height = '30px';
         barContainer.style.overflow = 'hidden';
         barContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
         this.domElement.appendChild(barContainer);
