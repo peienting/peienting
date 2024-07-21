@@ -2,11 +2,11 @@ import { Mesh, PlaneBufferGeometry, ShaderMaterial } from './three/three.module.
 
 const vshader = `
 varying vec2 vUv;
-void main() {   
+void main() {	
   vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 }
-`;
+`
 
 const fshader = `
 #define PI2 6.28318530718
@@ -18,7 +18,7 @@ varying vec2 vUv;
 float circle(vec2 pt, vec2 center, float radius){
   pt -= center;
   float len = length(pt);
-  return (len < radius) ? 1.0 : 0.0;
+  return (len<radius) ? 1.0 : 0.0;
 }
 
 float arc(vec2 pt, vec2 center, float radius, float percent){
@@ -28,29 +28,33 @@ float arc(vec2 pt, vec2 center, float radius, float percent){
   float len = length(d);
   float halfRadius = radius * 0.5;
 
-  if (len < radius && len > halfRadius){
+  if ( len<radius && len>halfRadius){
     percent = clamp(percent, 0.0, 1.0);
     float arcAngle = PI2 * percent;
 
-    float angle = mod(arcAngle - atan(d.y, d.x), PI2);
+    float angle = mod( arcAngle - atan(d.y, d.x), PI2);
     float edgeWidth = radius * 0.05;
-    result = (angle < arcAngle) ? smoothstep(halfRadius, halfRadius + edgeWidth, len) - smoothstep(radius - edgeWidth, radius, len) : 0.0;
+    result = (angle<arcAngle) ? smoothstep(halfRadius, halfRadius + edgeWidth, len) - smoothstep(radius-edgeWidth, radius, len) : 0.0;
   }
 
   return result;
 }
 
-void main (void) {
-  vec4 bgColor = vec4(0.0, 0.0, 0.0, 1.0); // Background color
-  // Light blue color for the arc
-  vec4 arcColor = vec4(0.5, 0.8, 1.0, 1.0); 
+void main (void)
+{
+  // Change bgColor to a pink color (you can adjust the values for different shades of pink)
+  vec4 bgColor = vec4(1.0, 0.75, 0.75, 1.0); // Light pink
+  // vec4 bgColor = vec4(1.0, 0.5, 0.5, 1.0); // Pink
+  // vec4 bgColor = vec4(1.0, 0.25, 0.25, 1.0); // Hot pink
+
+  vec4 arcColor = vec4(1.0);
   vec2 center = vec2(0.5);
   vec4 color = vec4(0.0);
   color += circle(vUv, center, 0.5) * bgColor;
   color += arc(vUv, center, 0.4, uProgress) * arcColor;
   gl_FragColor = color; 
 }
-`;
+`
 
 class RingProgressMesh extends Mesh {
     constructor(scale = 1) {
@@ -58,14 +62,14 @@ class RingProgressMesh extends Mesh {
 
         const uniforms = {
             uProgress: { value: 0.0 },
-        };
+        }
 
         this.material = new ShaderMaterial({
             uniforms: uniforms,
             vertexShader: vshader,
             fragmentShader: fshader,
             alphaTest: 0.5,
-            transparent: true,
+            transparent: true
         });
 
         this.geometry.dispose();
