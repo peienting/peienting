@@ -1,3 +1,9 @@
+/**
+ * @author mrdoob / http://mrdoob.com
+ * @author Mugen87 / https://github.com/Mugen87
+ * @author NikLever / http://niklever.com
+ */
+
 class VRButton {
 
     constructor(renderer, options) {
@@ -17,10 +23,14 @@ class VRButton {
 
             const button = document.createElement('button');
             button.style.display = 'none';
+            button.style.height = '60px'; // Increased height
+            button.style.width = '60px'; // Increased width
 
             navigator.xr.isSessionSupported(this.sessionMode).then((supported) => {
+
                 supported ? this.showEnterVR(button) : this.showWebXRNotFound(button);
                 if (options && options.vrStatus) options.vrStatus(supported);
+
             });
 
             document.body.appendChild(button);
@@ -62,16 +72,16 @@ class VRButton {
         let currentSession = null;
         const self = this;
 
-        this.stylizeElement(button, true, 30, true);
+        this.stylizeElement(button, true);
 
         function onSessionStarted(session) {
 
             session.addEventListener('end', onSessionEnded);
 
             self.renderer.xr.setSession(session);
-            self.stylizeElement(button, false, 12, true);
+            self.stylizeElement(button, false);
 
-            button.textContent = 'EXIT VR';
+            button.textContent = 'EXIT';
 
             currentSession = session;
 
@@ -83,8 +93,8 @@ class VRButton {
 
             currentSession.removeEventListener('end', onSessionEnded);
 
-            self.stylizeElement(button, true, 12, true);
-            button.textContent = 'ENTER VR';
+            self.stylizeElement(button, true);
+            button.textContent = 'START';
 
             currentSession = null;
 
@@ -95,26 +105,25 @@ class VRButton {
         //
 
         button.style.display = '';
-        button.style.right = '20px';
-        button.style.width = '80px';
-        button.style.height = '80px'; // Add height for round button
+        button.style.right = '50%'; // Center horizontally
+        button.style.bottom = '50%'; // Center vertically
+        button.style.transform = 'translate(50%, 50%)'; // Center the button
         button.style.cursor = 'pointer';
-        // Change button content to your preference (optional)
-        button.innerHTML = 'VR';
+        button.innerHTML = '<i class="fas fa-vr-cardboard"></i>';
 
         button.onmouseenter = function () {
 
-            button.style.fontSize = '12px';
-            button.textContent = (currentSession === null) ? 'ENTER VR' : 'EXIT VR';
+            button.style.fontSize = '20px'; // Font size on hover
+            button.style.background = '#E91E63'; // Pink color on hover
             button.style.opacity = '1.0';
 
         };
 
         button.onmouseleave = function () {
 
-            button.style.fontSize = '30px';
-            button.innerHTML = 'VR';
-            button.style.opacity = '0.5';
+            button.style.fontSize = '18px'; // Original font size
+            button.style.background = '#F06292'; // Lighter pink color when not hovered
+            button.style.opacity = '0.9';
 
         };
 
@@ -122,13 +131,60 @@ class VRButton {
 
             if (currentSession === null) {
 
-                // WebXR's requestReferenceSpace only works if the corresponding feature
-                // was requested at session creation time. For simplicity, just ask for
-                // the interesting ones as optional features, but be aware that the
-                // requestReferenceSpace call will fail if it turns out to be unavailable.
-                // ('local' is always available for immersive sessions and doesn't need to
-                // be requested separately.)
-
                 navigator.xr.requestSession(self.sessionMode, self.sessionInit).then(onSessionStarted);
 
+            } else {
 
+                currentSession.end();
+
+            }
+
+        };
+
+    }
+
+    disableButton(button) {
+
+        button.style.cursor = 'auto';
+        button.style.opacity = '0.5';
+
+        button.onmouseenter = null;
+        button.onmouseleave = null;
+
+        button.onclick = null;
+
+    }
+
+    showWebXRNotFound(button) {
+        this.stylizeElement(button, false);
+
+        this.disableButton(button);
+
+        button.style.display = '';
+        button.style.width = '100%';
+        button.style.right = '0px';
+        button.style.bottom = '0px';
+        button.style.border = '';
+        button.style.opacity = '1';
+        button.style.fontSize = '13px';
+        button.textContent = 'VR NOT SUPPORTED';
+    }
+
+    stylizeElement(element, active = true) {
+
+        element.style.position = 'absolute';
+        element.style.borderRadius = '50%'; // Make button round
+        element.style.border = 'none'; // Remove border
+        element.style.background = (active) ? '#F06292' : '#C2185B'; // Pink color for active and darker pink for inactive
+        element.style.color = '#fff';
+        element.style.font = 'normal 18px sans-serif'; // Default font size
+        element.style.textAlign = 'center';
+        element.style.opacity = '0.9'; // Slightly transparent
+        element.style.outline = 'none';
+        element.style.zIndex = '999';
+        element.style.padding = '10px'; // Padding inside the button
+    }
+
+};
+
+export { VRButton };
