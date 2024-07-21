@@ -1,4 +1,4 @@
-import { Mesh, PlaneBufferGeometry, ShaderMaterial } from './three/three.module.js';
+import { Mesh, PlaneBufferGeometry, ShaderMaterial, Vector4 } from './three/three.module.js';
 
 const vshader = `
 varying vec2 vUv;
@@ -21,7 +21,7 @@ varying vec2 vUv;
 float circle(vec2 pt, vec2 center, float radius){
   pt -= center;
   float len = length(pt);
-  return (len<radius) ? 1.0 : 0.0;
+  return (len < radius) ? 1.0 : 0.0;
 }
 
 float arc(vec2 pt, vec2 center, float radius, float percent, float thickness){
@@ -31,19 +31,19 @@ float arc(vec2 pt, vec2 center, float radius, float percent, float thickness){
   float len = length(d);
   float halfRadius = radius * 0.5;
 
-  if ( len<radius && len>halfRadius){
+  if (len < radius && len > halfRadius) {
     percent = clamp(percent, 0.0, 1.0);
     float arcAngle = PI2 * percent;
 
-    float angle = mod( arcAngle - atan(d.y, d.x), PI2);
+    float angle = mod(arcAngle - atan(d.y, d.x), PI2);
     float edgeWidth = radius * thickness;
-    result = (angle<arcAngle) ? smoothstep(halfRadius, halfRadius + edgeWidth, len) - smoothstep(radius-edgeWidth, radius, len) : 0.0;
+    result = (angle < arcAngle) ? smoothstep(halfRadius, halfRadius + edgeWidth, len) - smoothstep(radius - edgeWidth, radius, len) : 0.0;
   }
 
   return result;
 }
 
-void main (void)
+void main(void)
 {
   vec2 center = vec2(0.5);
   vec4 color = vec4(0.0);
@@ -53,13 +53,13 @@ void main (void)
 }`;
 
 class RingProgressMesh extends Mesh {
-    constructor(scale = 1, bgColor = [0, 0, 0, 1], arcColor = [1, 1, 1, 1], arcThickness = 0.05) {
+    constructor(scale = 1, bgColor = [0, 0, 0, 0.5], arcColor = [1, 0, 0, 1], arcThickness = 0.1) {
         super();
 
         const uniforms = {
             uProgress: { value: 0.0 },
-            uBgColor: { value: new THREE.Vector4(...bgColor) },
-            uArcColor: { value: new THREE.Vector4(...arcColor) },
+            uBgColor: { value: new Vector4(...bgColor) },
+            uArcColor: { value: new Vector4(...arcColor) },
             uArcThickness: { value: arcThickness },
         };
 
