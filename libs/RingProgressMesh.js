@@ -1,6 +1,3 @@
-Absolutely, here's the completed RingProgressMesh script with a pink color:
-
-JavaScript
 import { Mesh, PlaneBufferGeometry, ShaderMaterial } from './three/three.module.js';
 
 const vshader = `
@@ -15,6 +12,8 @@ const fshader = `
 #define PI2 6.28318530718
 
 uniform float uProgress;
+uniform vec4 ringColor; // Color of the ring (adjustable)
+uniform float ringOpacity; // Opacity of the ring (0.0 - transparent, 1.0 - opaque)
 
 varying vec2 vUv;
 
@@ -48,25 +47,24 @@ void main (void)
   // Set background to transparent black
   vec4 bgColor = vec4(0.0, 0.0, 0.0, 0.0);
 
-  // Pink color for the ring (adjust to your preference)
-  vec4 arcColor = vec4(1.0, 0.75, 0.75, 1.0); // Light pink
-  // vec4 arcColor = vec4(1.0, 0.5, 0.5, 1.0); // Pink
-  // vec4 arcColor = vec4(1.0, 0.25, 0.25, 1.0); // Hot pink
+  // Set ring color and opacity from uniforms
+  vec4 color = mix(bgColor, ringColor, ringOpacity);
 
   vec2 center = vec2(0.5);
-  vec4 color = vec4(0.0);
-  color += circle(vUv, center, 0.5) * bgColor;
-  color += arc(vUv, center, 0.4, uProgress) * arcColor;
+  color *= circle(vUv, center, 0.5);
+  color *= arc(vUv, center, 0.4, uProgress);
   gl_FragColor = color; 
 }
 `
 
 class RingProgressMesh extends Mesh {
-    constructor(scale = 1) {
+    constructor(scale = 1, color = new THREE.Color('pink'), opacity = 1.0) {
         super();
 
         const uniforms = {
             uProgress: { value: 0.0 },
+            ringColor: { value: new THREE.Color(color) },
+            ringOpacity: { value: opacity },
         }
 
         this.material = new ShaderMaterial({
@@ -91,6 +89,22 @@ class RingProgressMesh extends Mesh {
 
     get progress() {
         return this.material.uniforms.uProgress.value;
+    }
+
+    set color(color) {
+        this.material.uniforms.ringColor.value = new THREE.Color(color);
+    }
+
+    get color() {
+        return this.material.uniforms.ringColor.value;
+    }
+
+    set opacity(value) {
+        this.material.uniforms.ringOpacity.value = value;
+    }
+
+    get opacity() {
+        return this.material.uniforms.ringOpacity.value;
     }
 }
 
