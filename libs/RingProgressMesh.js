@@ -1,3 +1,6 @@
+Absolutely, here's the completed RingProgressMesh script with a pink color:
+
+JavaScript
 import { Mesh, PlaneBufferGeometry, ShaderMaterial } from './three/three.module.js';
 
 const vshader = `
@@ -42,12 +45,14 @@ float arc(vec2 pt, vec2 center, float radius, float percent){
 
 void main (void)
 {
-  // Change bgColor to a pink color (you can adjust the values for different shades of pink)
-  vec4 bgColor = vec4(1.0, 0.75, 0.75, 1.0); // Light pink
-  // vec4 bgColor = vec4(1.0, 0.5, 0.5, 1.0); // Pink
-  // vec4 bgColor = vec4(1.0, 0.25, 0.25, 1.0); // Hot pink
+  // Set background to transparent black
+  vec4 bgColor = vec4(0.0, 0.0, 0.0, 0.0);
 
-  vec4 arcColor = vec4(1.0);
+  // Pink color for the ring (adjust to your preference)
+  vec4 arcColor = vec4(1.0, 0.75, 0.75, 1.0); // Light pink
+  // vec4 arcColor = vec4(1.0, 0.5, 0.5, 1.0); // Pink
+  // vec4 arcColor = vec4(1.0, 0.25, 0.25, 1.0); // Hot pink
+
   vec2 center = vec2(0.5);
   vec4 color = vec4(0.0);
   color += circle(vUv, center, 0.5) * bgColor;
