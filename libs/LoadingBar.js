@@ -9,9 +9,20 @@ class LoadingBar {
         this.domElement.style.background = '#000';
         this.domElement.style.opacity = '0.7';
         this.domElement.style.display = 'flex';
+        this.domElement.style.flexDirection = 'column';
         this.domElement.style.alignItems = 'center';
         this.domElement.style.justifyContent = 'center';
         this.domElement.style.zIndex = '1111';
+
+        this.startTime = Date.now();
+        this.estimatedTime = options.estimatedTime || 5000; // Estimated time in milliseconds
+
+        const timerElement = document.createElement("div");
+        timerElement.style.color = '#fff';
+        timerElement.style.fontSize = '20px';
+        timerElement.style.marginBottom = '20px';
+        this.timerElement = timerElement;
+        this.domElement.appendChild(timerElement);
 
         const barBase = document.createElement("div");
         barBase.style.width = '50%';
@@ -31,6 +42,16 @@ class LoadingBar {
         barBase.appendChild(bar);
 
         document.body.appendChild(this.domElement);
+        this.updateTimer();
+    }
+
+    updateTimer() {
+        const elapsedTime = Date.now() - this.startTime;
+        const remainingTime = Math.max(this.estimatedTime - elapsedTime, 0);
+        this.timerElement.textContent = `Time remaining: ${(remainingTime / 1000).toFixed(1)}s`;
+        if (remainingTime > 0) {
+            requestAnimationFrame(this.updateTimer.bind(this));
+        }
     }
 
     onprogress(delta) {
