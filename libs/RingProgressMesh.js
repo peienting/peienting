@@ -1,8 +1,8 @@
-import { Mesh, PlaneBufferGeometry, ShaderMaterial, Vector4 } from './three/three.module.js';
+import { Mesh, PlaneBufferGeometry, ShaderMaterial } from './three/three.module.js';
 
 const vshader = `
 varying vec2 vUv;
-void main() {	
+void main() {    
   vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 }
@@ -12,9 +12,6 @@ const fshader = `
 #define PI2 6.28318530718
 
 uniform float uProgress;
-uniform vec4 uBgColor;
-uniform vec4 uArcColor;
-uniform float uArcThickness;
 
 varying vec2 vUv;
 
@@ -24,43 +21,42 @@ float circle(vec2 pt, vec2 center, float radius){
   return (len < radius) ? 1.0 : 0.0;
 }
 
-float arc(vec2 pt, vec2 center, float radius, float percent, float thickness){
+float arc(vec2 pt, vec2 center, float radius, float percent){
   float result = 0.0;
 
   vec2 d = pt - center;
   float len = length(d);
   float halfRadius = radius * 0.5;
 
-  if (len < radius && len > halfRadius) {
+  if (len < radius && len > halfRadius){
     percent = clamp(percent, 0.0, 1.0);
     float arcAngle = PI2 * percent;
 
     float angle = mod(arcAngle - atan(d.y, d.x), PI2);
-    float edgeWidth = radius * thickness;
+    float edgeWidth = radius * 0.05;
     result = (angle < arcAngle) ? smoothstep(halfRadius, halfRadius + edgeWidth, len) - smoothstep(radius - edgeWidth, radius, len) : 0.0;
   }
 
   return result;
 }
 
-void main(void)
-{
+void main (void) {
+  vec4 bgColor = vec4(0.0, 0.0, 0.0, 1.0); // Background color
+  vec4 arcColor = vec4(1.0, 0.75, 0.8, 1.0); // Pink color for the arc
   vec2 center = vec2(0.5);
   vec4 color = vec4(0.0);
-  color += circle(vUv, center, 0.5) * uBgColor;
-  color += arc(vUv, center, 0.4, uProgress, uArcThickness) * uArcColor;
+  color += circle(vUv, center, 0.5) * bgColor;
+  color += arc(vUv, center, 0.4, uProgress) * arcColor;
   gl_FragColor = color; 
-}`;
+}
+`;
 
 class RingProgressMesh extends Mesh {
-    constructor(scale = 1, bgColor = [0, 0, 0, 0.8], arcColor = [0, 1, 0, 1], arcThickness = 0.1) {
+    constructor(scale = 1) {
         super();
 
         const uniforms = {
             uProgress: { value: 0.0 },
-            uBgColor: { value: new Vector4(...bgColor) },
-            uArcColor: { value: new Vector4(...arcColor) },
-            uArcThickness: { value: arcThickness },
         };
 
         this.material = new ShaderMaterial({
@@ -68,7 +64,7 @@ class RingProgressMesh extends Mesh {
             vertexShader: vshader,
             fragmentShader: fshader,
             alphaTest: 0.5,
-            transparent: true
+            transparent: true,
         });
 
         this.geometry.dispose();
