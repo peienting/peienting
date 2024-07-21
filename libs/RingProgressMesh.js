@@ -53,7 +53,7 @@ void main(void)
 }`;
 
 class RingProgressMesh extends Mesh {
-    constructor(scale = 1, bgColor = [0, 0, 0, 0.5], arcColor = [1, 0, 0, 1], arcThickness = 0.1) {
+    constructor(scale = 1, bgColor = [0, 0, 0, 0.8], arcColor = [0, 1, 0, 1], arcThickness = 0.1) {
         super();
 
         const uniforms = {
