@@ -11,8 +11,16 @@ class LoadingBar {
         this.domElement.style.display = 'flex';
         this.domElement.style.alignItems = 'center';
         this.domElement.style.justifyContent = 'center';
+        this.domElement.style.flexDirection = 'column'; // Stack elements vertically
         this.domElement.style.zIndex = '1111';
         this.domElement.style.transition = 'opacity 0.5s';
+
+        // Create text element for "Bolton College"
+        const collegeText = document.createElement("h2");
+        collegeText.textContent = "Bolton College";
+        collegeText.style.margin = '0'; // Remove default margin
+        collegeText.style.textAlign = 'center'; // Center text horizontally
+        this.domElement.appendChild(collegeText);
 
         const barContainer = document.createElement("div");
         // Set bar container background to a shade darker than the background
