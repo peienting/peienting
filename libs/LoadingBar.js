@@ -6,7 +6,8 @@ class LoadingBar {
         this.domElement.style.left = '0';
         this.domElement.style.width = '100%';
         this.domElement.style.height = '100%';
-        this.domElement.style.background = 'rgba(0, 0, 0, 0.9)'; // Background with slight transparency
+        // Set background color to warm pink
+        this.domElement.style.background = 'lightpink'; // Or other warm pink color like '#ff9999'
         this.domElement.style.display = 'flex';
         this.domElement.style.alignItems = 'center';
         this.domElement.style.justifyContent = 'center';
@@ -14,7 +15,8 @@ class LoadingBar {
         this.domElement.style.transition = 'opacity 0.5s';
 
         const barContainer = document.createElement("div");
-        barContainer.style.background = '#444'; // Darker background for contrast
+        // Set bar container background to a shade darker than the background
+        barContainer.style.background = '#ffb3b3'; // Or other dark pink color
         barContainer.style.width = '50%';
         barContainer.style.minWidth = '250px';
         barContainer.style.borderRadius = '10px';
@@ -24,7 +26,8 @@ class LoadingBar {
         this.domElement.appendChild(barContainer);
 
         const bar = document.createElement("div");
-        bar.style.background = 'linear-gradient(90deg, #FF69B4, #FF1493)'; // Warm pink gradient
+        // Keep the progress bar gradient for a distinct look
+        bar.style.background = 'linear-gradient(90deg, #FF69B4, #FF1493)';
         bar.style.height = '100%';
         bar.style.width = '0';
         bar.style.borderRadius = '10px';
